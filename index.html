@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Кредитний калькулятор</title>
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/custom-inputs.css" />
+  </head>
+  <body>
+    <form class="form" id="loanForm">
+      <div class="form__group">
+        <label class="form__label" for="loanAmount"
+          >Сума кредиту:</label
+        >
+        <input
+          type="number"
+          class="form__input form__input--number"
+          id="loanAmount"
+          name="loanAmount"
+          value="15000"
+          min="1000"
+          max="50000"
+          step="100"
+          required
+        />
+        <input
+          type="range"
+          class="form__input form__input--range"
+          id="loanAmountRange"
+          name="loanAmountRange"
+          value="15000"
+          min="1000"
+          max="50000"
+          step="100"
+          required
+        />
+        <p class="form__error form__error--loan">
+          Сума кредиту 1000-50000 грн
+        </p>
+      </div>
+
+      <div class="form__group">
+        <label class="form__label" for="repaymentPeriod"
+          >Період погашення (днів):</label
+        >
+        <input
+          type="number"
+          class="form__input form__input--number"
+          id="repaymentPeriod"
+          name="repaymentPeriod"
+          value="25"
+          min="7"
+          max="60"
+          step="1"
+          required
+        />
+        <input
+          type="range"
+          class="form__input form__input--range"
+          id="repaymentPeriodRange"
+          name="repaymentPeriodRange"
+          value="25"
+          min="7"
+          max="60"
+          step="1"
+          required
+        />
+        <p class="form__error form__error--repayment">
+          Період погашення 7-60 днів
+        </p>
+      </div>
+
+      <button
+        class="form__button"
+        type="button"
+        onclick="calculateLoan()"
+      >
+        Отримати кредит
+      </button>
+
+      <div class="repayment">
+        <p class="repayment__daily">Денна сума погашення:</p>
+        <p class="repayment__daily_value"><span>0</span> грн</p>
+        <p class="repayment__total">Загальна сума погашення:</p>
+        <p class="repayment__total_value"><span>0</span> грн</p>
+      </div>
+    </form>
+    <script src="js/script.js"></script>
+  </body>
+</html>
