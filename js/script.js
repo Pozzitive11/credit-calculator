@@ -78,6 +78,8 @@ const validateForm = () => {
 
     // Встановлення стану кнопки
     formButton.disabled = !(loanAmountValid && repaymentPeriodValid);
+
+    calculateLoan();
   });
 };
 
