@@ -8,89 +8,185 @@
       content="width=device-width, initial-scale=1.0"
     />
     <title>Кредитний калькулятор</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/custom-inputs.css" />
   </head>
   <body>
-    <form class="form" id="loanForm">
-      <div class="form__group">
-        <label class="form__label" for="loanAmount"
-          >Сума кредиту:</label
+    <div class="finance__calc">
+      <div class="finance__tabs">
+        <button
+          id="firstCreditTab"
+          data-calculator-variable="first_credit"
+          class="finance__tab finance__tab-active"
         >
-        <input
-          type="number"
-          class="form__input form__input--number"
-          id="loanAmount"
-          name="loanAmount"
-          value="15000"
-          min="1000"
-          max="50000"
-          step="100"
-          required
-        />
-        <input
-          type="range"
-          class="form__input form__input--range"
-          id="loanAmountRange"
-          name="loanAmountRange"
-          value="15000"
-          min="1000"
-          max="50000"
-          step="100"
-          required
-        />
-        <p class="form__error form__error--loan">
-          Сума кредиту 1000-50000 грн
-        </p>
-      </div>
-
-      <div class="form__group">
-        <label class="form__label" for="repaymentPeriod"
-          >Період погашення (днів):</label
+          Перший кредит
+        </button>
+        <button
+          id="repeatCreditTab"
+          data-calculator-variable="repeated_credit"
+          class="finance__tab"
         >
-        <input
-          type="number"
-          class="form__input form__input--number"
-          id="repaymentPeriod"
-          name="repaymentPeriod"
-          value="25"
-          min="7"
-          max="60"
-          step="1"
-          required
-        />
-        <input
-          type="range"
-          class="form__input form__input--range"
-          id="repaymentPeriodRange"
-          name="repaymentPeriodRange"
-          value="25"
-          min="7"
-          max="60"
-          step="1"
-          required
-        />
-        <p class="form__error form__error--repayment">
-          Період погашення 7-60 днів
-        </p>
+          Повторний кредит
+        </button>
       </div>
+      <form class="finance__calc_form" id="financeCalcForm">
+        <div class="form__group">
+          <label class="form__label" for="financeCalcAmount"
+            >Сума кредиту:</label
+          >
+          <input
+            type="number"
+            class="form__input form__input--number finance__calc_input"
+            id="financeCalcAmount"
+            name="financeCalcAmount"
+            value="1000"
+            min="1000"
+            max="50000"
+            step="100"
+            required
+          />
+          <input
+            type="range"
+            class="form__input form__input--range finance__calc_input"
+            id="financeCalcAmountRange"
+            name="financeCalcAmountRange"
+            value="1000"
+            min="1000"
+            max="50000"
+            step="100"
+            required
+          />
+          <p class="form__error form__error--loan">
+            Сума кредиту 1000-50000 грн
+          </p>
+        </div>
 
-      <button
-        class="form__button"
-        type="button"
-        onclick="calculateLoan()"
-      >
-        Отримати кредит
-      </button>
+        <div class="form__group">
+          <label
+            class="form__label"
+            for="financialCalcRepaymentPeriod"
+            >Період погашення (днів):</label
+          >
+          <input
+            type="number"
+            class="form__input form__input--number finance__calc_input"
+            id="financialCalcRepaymentPeriod"
+            name="financialCalcRepaymentPeriod"
+            value="10"
+            min="7"
+            max="60"
+            step="1"
+            required
+          />
+          <input
+            type="range"
+            class="form__input form__input--range finance__calc_input"
+            id="financialCalcRepaymentPeriodRange"
+            name="financialCalcRepaymentPeriodRange"
+            value="10"
+            min="7"
+            max="60"
+            step="1"
+            required
+          />
+          <p class="form__error form__error--repayment">
+            Період погашення 7-60 днів
+          </p>
+        </div>
 
-      <div class="repayment">
+        <button
+          class="finance__calc_button"
+          type="button"
+          onclick="calculateLoan()"
+        >
+          Отримати кредит
+        </button>
+
+        <!-- <div class="repayment">
         <p class="repayment__daily">Денна сума погашення:</p>
         <p class="repayment__daily_value"><span>0</span> грн</p>
         <p class="repayment__total">Загальна сума погашення:</p>
         <p class="repayment__total_value"><span>0</span> грн</p>
+      </div> -->
+      </form>
+
+      <div class="finance__table">
+        <div class="finance__table_top" style="text-align: center">
+          <p><b>Для споживчого кредиту</b></p>
+          <p>
+            Для прикладу розрахунок для
+            <span data-calculator-variable="word-is-secondary"
+              >першого</span
+            >
+            кредиту на суму
+            <span data-calculator-variable="body_amount"></span>
+            з періодичністю платежу кожні
+            <span data-calculator-variable="term">5</span> днів
+          </p>
+        </div>
+        <div class="finance__table_container">
+          <table id="dataTable">
+            <thead class="finance__table_header">
+              <tr>
+                <td rowspan="2">Дата платежу</td>
+                <td colspan="5">Платежі за розрахунковий період</td>
+              </tr>
+              <tr>
+                <td>Проценти за користування кредитом</td>
+                <td>Платежі за кредитом</td>
+                <td>
+                  Платіж за супровідні послуги фінансової установи
+                </td>
+                <td>Платіж за послуги платіжного посередника</td>
+                <td>Платіж за послуги третіх осіб</td>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="finance__table_bottom">
+          <table>
+            <tbody>
+              <tr>
+                <td>Сума кредиту</td>
+                <td data-calculator-variable="body_amount"></td>
+              </tr>
+              <tr>
+                <td>Сума процентів</td>
+                <td data-calculator-variable="commission_amount"></td>
+              </tr>
+              <tr>
+                <td>Загальна вартість кредиту</td>
+                <td data-calculator-variable="total_amount"></td>
+              </tr>
+              <tr>
+                <td>
+                  Реальна річна процентна ставка, відсотків річних НБУ
+                  ЧИСТВНДОХ (XIRR)
+                </td>
+                <td data-calculator-variable="xirr"></td>
+              </tr>
+              <tr>
+                <td>Реальна щоденна процентна ставка</td>
+                <td data-calculator-variable="daily_rate"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </form>
-    <script src="js/script.js"></script>
+    </div>
+    <!-- <script src="js/script.js"></script> -->
+    <script src="js/table.js"></script>
   </body>
 </html>

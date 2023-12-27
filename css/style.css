@@ -1,8 +1,3 @@
-@font-face {
-  font-family: "ObjectSans-Medium";
-  src: url("../fonts/ObjectSans-Medium.woff") format("woff");
-  font-display: swap;
-}
 html {
   box-sizing: border-box;
 }
@@ -12,33 +7,61 @@ html {
 *::after {
   box-sizing: inherit;
 }
-
-body {
-  font-family: ObjectSans-Medium, sans-serif;
-  color: rgb(34, 34, 34);
-  background-color: #f4f4f4;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  margin: 0;
-  font-size: 16px;
-}
-
 p {
   margin: 0;
   padding: 0;
 }
+.finance__calc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-family: Geologica;
+  color: rgb(34, 34, 34);
+  background-color: #f4f4f4;
+  margin: 0;
+  font-size: 16px;
+  padding-top: 100px;
+}
 
-.form {
+/* TABS */
+.finance__tab.finance__tab-active {
+  background-color: #00c273;
+  color: white;
+}
+
+.finance__tab {
+  width: 169px;
+  padding: 12px 0 12px;
+  border: 1px solid #292c2f;
+  border-radius: 2px;
+  background-color: #fff;
+  margin-bottom: 5px;
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+}
+.finance__tab:hover,
+.finance__tab:focus {
+  background-color: #00c273;
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* FORM */
+.finance__calc_form {
   background-color: #fff;
   padding: 20px;
   border-radius: 4px;
   border: 1px solid #292c2f;
-  width: 300px;
+  max-width: 500px;
+  width: 100%;
   text-align: center;
 }
-
+@media (max-width: 500px) {
+  .finance__calc_form {
+    max-width: 342px;
+  }
+}
 .form__group {
   margin-bottom: 20px;
 }
@@ -57,7 +80,7 @@ p {
   width: 100%;
 }
 
-.form__button {
+.finance__calc_button {
   width: 169px;
   padding: 12px 0 12px;
   border: 1px solid #292c2f;
@@ -70,7 +93,7 @@ p {
 
 .form__button:hover,
 .form__button:focus {
-  background-color: #292c2f;
+  background-color: #00c273;
   color: #fff;
   border-radius: 2px;
 }
@@ -116,4 +139,81 @@ p {
 
 .repayment__daily_value {
   margin-bottom: 12px;
+}
+
+/* TABLE */
+
+.finance__table {
+  width: 850px;
+  margin: 20px auto;
+  border: 1px solid #292c2f;
+  border-radius: 4px;
+  background-color: #fff;
+  overflow-x: auto;
+}
+@media (max-width: 900px) {
+  .finance__table {
+    max-width: 700px;
+  }
+}
+@media (max-width: 700px) {
+  .finance__table {
+    max-width: 500px;
+  }
+}
+@media (max-width: 500px) {
+  .finance__table {
+    max-width: 330px;
+  }
+}
+
+.finance__table_top {
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.finance__table_container {
+  max-height: 700px;
+  overflow-y: auto;
+}
+
+.finance__table_header {
+  position: sticky;
+  top: 0;
+  background-color: #eeeeee;
+}
+
+.finance__table_header td,
+.finance__table_header tr {
+  border: 1px solid rgb(191, 191, 191);
+}
+
+.finance__table_container table,
+.finance__table_bottom table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.finance__table_container td {
+  border: 1px solid rgb(191, 191, 191);
+  text-align: center;
+  padding: 8px;
+}
+
+.finance__table_container tbody tr:hover,
+.finance__table_bottom tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+.finance__table_bottom {
+  padding: 25px 15px 15px 15px;
+}
+.finance__table_bottom td {
+  padding: 8px;
+  text-align-last: left;
+  border-bottom: 1px solid #000;
+}
+.finance__table_bottom td[data-calculator-variable] {
+  font-weight: bold;
 }

@@ -7,10 +7,12 @@ const REPEATED_CREDIT_DISCOUNT_RATE = 0.04;
 const CALCULATION_PERIOD_DAYS = 730;
 
 const formGroups = document.querySelectorAll(".form__group");
-const formButton = document.querySelector(".form__button");
-const form = document.getElementById("loanForm");
-const loanAmount = document.getElementById("loanAmount");
-const repaymentPeriod = document.getElementById("repaymentPeriod");
+const formButton = document.querySelector(".finance__calc_button");
+const form = document.getElementById("financeCalcForm");
+const loanAmount = document.getElementById("financeCalcAmount");
+const repaymentPeriod = document.getElementById(
+  "financialCalcRepaymentPeriod"
+);
 const errorLoan = document.querySelector(".form__error--loan");
 const errorRepayment = document.querySelector(
   ".form__error--repayment"
@@ -61,14 +63,14 @@ let repeatedRate = FIST_CREDIT_DISCOUNT_RATE;
 
 function handleTabClick(event) {
   // Вимкніть активний клас у всіх кнопок
-  firstCreditButton.classList.remove("active");
-  repeatedCreditButton.classList.remove("active");
+  firstCreditButton.classList.remove("finance__tab-active");
+  repeatedCreditButton.classList.remove("finance__tab-active");
 
   // Отримайте кнопку, на яку натиснули
   const clickedButton = event.target;
 
   // Включіть активний клас для обраної кнопки
-  clickedButton.classList.add("active");
+  clickedButton.classList.add("finance__tab-active");
 
   // Додайте вашу логіку для зміни вмісту або оновлення інтерфейсу відповідно до вибраної вкладки
   if (clickedButton === firstCreditButton) {
@@ -81,31 +83,47 @@ function handleTabClick(event) {
   calculateLoan();
 }
 
-const calculateLoan = () => {
-  const loanAmountValue = parseFloat(loanAmount.value);
-  const repaymentPeriodValue = parseInt(repaymentPeriod.value);
-
-  tbody.innerHTML = "";
-  const rowNumber = 730 - repaymentPeriodValue;
-  // Date =========================================
+// Генерація дат
+const generateDates = (repaymentPeriodValue) => {
   const today = new Date();
   const firstPay = new Date(today);
   firstPay.setDate(today.getDate() + repaymentPeriodValue - 1);
-  const dates = [];
-  dates.push(firstPay);
-  for (let i = 0; i < rowNumber; i++) {
+
+  const dates = [firstPay];
+  for (let i = 0; i < 730 - repaymentPeriodValue; i++) {
     const nextDate = new Date(dates[i]);
     nextDate.setDate(nextDate.getDate() + 1);
     dates.push(nextDate);
   }
+  return dates;
+};
 
-  // =========================================
-  const payments = [];
-  payments.push(loanAmountValue);
-
-  const interestForUsingCredit = [];
-  interestForUsingCredit.push(loanAmountValue * currentRate);
+// Генерація платежів
+const generatePayments = (loanAmountValue, rowNumber) => {
+  const payments = [loanAmountValue];
   for (let i = 0; i < rowNumber; i++) {
+    payments.unshift(0);
+  }
+  return payments;
+};
+
+// Генерація відсотків за користування кредитом
+const generateInterestForUsingCredit = (
+  loanAmountValue,
+  repeatedRate,
+  rowNumber
+) => {
+  const interestForUsingCredit = [loanAmountValue * currentRate];
+  for (let i = 0; i < rowNumber; i++) {
+    interestForUsingCredit.push(loanAmountValue * repeatedRate);
+  }
+  return interestForUsingCredit;
+};
+
+// Оновлення таблиці
+const updateTable = (dates, payments, interestForUsingCredit) => {
+  tbody.innerHTML = "";
+  for (let i = 0; i < dates.length; i++) {
     const row = tbody.insertRow(i);
     const cellDate = row.insertCell(0);
     const cellInterest = row.insertCell(1);
@@ -116,33 +134,29 @@ const calculateLoan = () => {
 
     const formattedDate = dates[i].toLocaleDateString();
     cellDate.innerHTML = formattedDate;
-
-    if (i === rowNumber - 1) {
-      // Якщо це останній рядок, вставляємо значення loanAmountValue
-      payments.unshift(loanAmountValue);
-      cellPayment.innerHTML = loanAmountValue.toFixed(2) + " грн";
-    } else {
-      // Якщо не останній рядок, вставляємо "0,00 грн"
-      payments.unshift(0);
-      cellPayment.innerHTML = "0.00 грн";
-    }
-
-    interestForUsingCredit.push(loanAmountValue * repeatedRate);
-    cellInterest.innerHTML = interestForUsingCredit[i];
-
+    cellPayment.innerHTML = payments[i].toFixed(2) + " грн";
+    cellInterest.innerHTML =
+      interestForUsingCredit[i].toFixed(2) + " грн";
     cellServiceFee.innerHTML = "0.00 грн";
     cellIntermediaryFee.innerHTML = "0.00 грн";
     cellThirdPartyFee.innerHTML = "0.00 грн";
   }
+};
 
-  // Оновлення всіх місць виведення суми кредиту
+// Оновлення виведених значень
+const updateOutputValues = (
+  loanAmountValue,
+  repaymentPeriodValue,
+  interestForUsingCredit,
+  rowNumber
+) => {
   bodyAmountSpans.forEach((span) => {
     span.textContent = loanAmountValue.toFixed(2) + " грн";
   });
 
   term.textContent = repaymentPeriodValue;
   const commissionAmount = interestForUsingCredit.reduce(
-    (accumulator, currentValue) => accumulator + currentValue,
+    (acc, val) => acc + val,
     0
   );
 
@@ -155,27 +169,36 @@ const calculateLoan = () => {
       2
     ) + "%";
   dailyRateBlock.innerHTML = dailyRate;
-  //
-  //
-  //
-  //
-  //
-  const dateObjects = dates.map(
-    (dateString) => new Date(dateString.toLocaleDateString())
+};
+
+const calculateLoan = () => {
+  const loanAmountValue = parseFloat(loanAmount.value);
+  const repaymentPeriodValue = parseInt(repaymentPeriod.value);
+  const rowNumber = 730 - repaymentPeriodValue;
+
+  const dates = generateDates(repaymentPeriodValue);
+  const payments = generatePayments(loanAmountValue, rowNumber);
+  const interestForUsingCredit = generateInterestForUsingCredit(
+    loanAmountValue,
+    repeatedRate,
+    rowNumber
   );
-  const newPayments = interestForUsingCredit.slice();
-  const firstPayment = newPayments[0];
-  newPayments[0] = -Math.abs(firstPayment);
-  console.log(xirr(newPayments, dateObjects));
 
-  //   const dailyRepayment =
-  //     (loanAmountValue +
-  //       loanAmountValue * (interestRate / 100) * repaymentPeriodValue) /
-  //     repaymentPeriodValue;
-  //   const totalRepayment = dailyRepayment * repaymentPeriodValue;
+  updateTable(dates, payments, interestForUsingCredit);
+  updateOutputValues(
+    loanAmountValue,
+    repaymentPeriodValue,
+    interestForUsingCredit,
+    rowNumber
+  );
 
-  //   dailyRepaymentBlock.textContent = dailyRepayment.toFixed(2);
-  //   totalRepaymentBlock.textContent = totalRepayment.toFixed(2);
+  const cashflows = interestForUsingCredit.slice();
+  cashflows.unshift(-loanAmountValue);
+  cashflows[cashflows.length - 1] = 1040;
+  const dateObjects = dates.slice().map((date) => date.getTime());
+  //   dateObjects.unshift(new Date().getTime());
+
+  //   const rate = xirr(cashflows, dateObjects);
 };
 // Синхронізація значень між інпутами
 const synchronizeInputs = () => {
@@ -232,13 +255,7 @@ const validateForm = () => {
   });
 };
 
-// Ініціалізація
-synchronizeInputs();
-validateForm();
-
-calculateLoan();
-
-function xirr(cashflows, dates) {
+const xirr = (cashflows, dates) => {
   function npv(rate) {
     return cashflows.reduce((acc, val, i) => {
       var days = (dates[i] - dates[0]) / 86400000; // convert milliseconds to days
@@ -272,4 +289,8 @@ function xirr(cashflows, dates) {
   }
 
   return newRate;
-}
+};
+// Ініціалізація
+synchronizeInputs();
+validateForm();
+calculateLoan();

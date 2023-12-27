@@ -1,13 +1,13 @@
-input[type="range"] {
+.finance__calc_input[type="range"] {
   height: 27px;
   -webkit-appearance: none;
   margin: 10px 0;
   width: 100%;
 }
-input[type="range"]:focus {
+.finance__calc_input[type="range"]:focus {
   outline: none;
 }
-input[type="range"]::-webkit-slider-runnable-track {
+.finance__calc_input[type="range"]::-webkit-slider-runnable-track {
   width: 100%;
   height: 10px;
   cursor: pointer;
@@ -17,7 +17,7 @@ input[type="range"]::-webkit-slider-runnable-track {
   border-radius: 2px;
   border: 1px solid #292c2f;
 }
-input[type="range"]::-webkit-slider-thumb {
+.finance__calc_input[type="range"]::-webkit-slider-thumb {
   box-shadow: 1px 1px 1px #292c2f;
   border: 1px solid #292c2f;
   height: 19px;
@@ -28,10 +28,10 @@ input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   margin-top: -5.5px;
 }
-input[type="range"]:focus::-webkit-slider-runnable-track {
+.finance__calc_input[type="range"]:focus::-webkit-slider-runnable-track {
   background: #292c2f;
 }
-input[type="range"]::-moz-range-track {
+.finance__calc_input[type="range"]::-moz-range-track {
   width: 100%;
   height: 10px;
   cursor: pointer;
@@ -41,7 +41,7 @@ input[type="range"]::-moz-range-track {
   border-radius: 2px;
   border: 1px solid #292c2f;
 }
-input[type="range"]::-moz-range-thumb {
+.finance__calc_input[type="range"]::-moz-range-thumb {
   box-shadow: 1px 1px 1px #292c2f;
   border: 1px solid #292c2f;
   height: 19px;
@@ -50,7 +50,7 @@ input[type="range"]::-moz-range-thumb {
   background: #ffffff;
   cursor: pointer;
 }
-input[type="range"]::-ms-track {
+.finance__calc_input[type="range"]::-ms-track {
   width: 100%;
   height: 10px;
   cursor: pointer;
@@ -59,19 +59,19 @@ input[type="range"]::-ms-track {
   border-color: transparent;
   color: transparent;
 }
-input[type="range"]::-ms-fill-lower {
+.finance__calc_input[type="range"]::-ms-fill-lower {
   background: #292c2f;
   border: 1px solid #292c2f;
   border-radius: 4px;
   box-shadow: 1px 1px 1px #292c2f;
 }
-input[type="range"]::-ms-fill-upper {
+.finance__calc_input[type="range"]::-ms-fill-upper {
   background: #292c2f;
   border: 1px solid #292c2f;
   border-radius: 4px;
   box-shadow: 1px 1px 1px #292c2f;
 }
-input[type="range"]::-ms-thumb {
+.finance__calc_input[type="range"]::-ms-thumb {
   margin-top: 1px;
   box-shadow: 1px 1px 1px #292c2f;
   border: 1px solid #292c2f;
@@ -81,9 +81,9 @@ input[type="range"]::-ms-thumb {
   background: #ffffff;
   cursor: pointer;
 }
-input[type="range"]:focus::-ms-fill-lower {
+.finance__calc_input[type="range"]:focus::-ms-fill-lower {
   background: #292c2f;
 }
-input[type="range"]:focus::-ms-fill-upper {
+.finance__calc_input[type="range"]:focus::-ms-fill-upper {
   background: #292c2f;
 }
