@@ -11,14 +11,13 @@ p {
   margin: 0;
   padding: 0;
 }
-.finance__calc {
+.finance-calc {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   font-family: Geologica;
   color: rgb(34, 34, 34);
-  background-color: #f4f4f4;
   margin: 0;
   font-size: 16px;
   padding-top: 100px;
@@ -40,6 +39,7 @@ p {
   transition: all 0.1s ease-in-out;
   cursor: pointer;
 }
+
 .finance__tab:hover,
 .finance__tab:focus {
   background-color: #00c273;
@@ -48,7 +48,7 @@ p {
 }
 
 /* FORM */
-.finance__calc_form {
+.finance-calc__form {
   background-color: #fff;
   padding: 20px;
   border-radius: 4px;
@@ -57,27 +57,25 @@ p {
   width: 100%;
   text-align: center;
 }
+
 @media (max-width: 500px) {
   .finance__calc_form {
     max-width: 342px;
   }
 }
-.form__group {
+
+.finance-calc__form_group {
   margin-bottom: 20px;
 }
 
-.form__label {
+.finance-calc__form_label {
   display: block;
   margin-bottom: 8px;
 }
 
-.form__input {
+.finance-calc__form_input {
   width: calc(100% - 16px);
   padding: 8px;
-}
-
-.form__range {
-  width: 100%;
 }
 
 .finance__calc_button {
@@ -91,28 +89,30 @@ p {
   cursor: pointer;
 }
 
-.form__button:hover,
-.form__button:focus {
+.finance__calc_button:hover,
+.finance__calc_button:focus {
   background-color: #00c273;
   color: #fff;
   border-radius: 2px;
 }
 
-.form__button:disabled {
+.finance__calc_button:disabled {
   background-color: #d5d9d9;
   border-color: #d5d9d9;
   color: #808080;
   cursor: not-allowed;
 }
 
-.form__error {
+.finance-calc__form_error {
   display: none;
   color: #ff0000;
   font-size: 14px;
 }
+
 .visible {
   display: block;
 }
+
 .repayment__daily,
 .repayment__total {
   margin-bottom: 5px;
@@ -151,16 +151,19 @@ p {
   background-color: #fff;
   overflow-x: auto;
 }
+
 @media (max-width: 900px) {
   .finance__table {
     max-width: 700px;
   }
 }
+
 @media (max-width: 700px) {
   .finance__table {
     max-width: 500px;
   }
 }
+
 @media (max-width: 500px) {
   .finance__table {
     max-width: 330px;
@@ -209,11 +212,13 @@ p {
 .finance__table_bottom {
   padding: 25px 15px 15px 15px;
 }
+
 .finance__table_bottom td {
   padding: 8px;
   text-align-last: left;
   border-bottom: 1px solid #000;
 }
+
 .finance__table_bottom td[data-calculator-variable] {
   font-weight: bold;
 }

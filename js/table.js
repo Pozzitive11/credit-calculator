@@ -5,23 +5,24 @@ const REPEATED_CREDIT_CURRENT_RATE = 0.02;
 const REPEATED_CREDIT_DISCOUNT_RATE = 0.04;
 
 const CALCULATION_PERIOD_DAYS = 730;
-
-const formGroups = document.querySelectorAll(".form__group");
+const formGroups = document.querySelectorAll(
+  ".finance-calc__form_group"
+);
 const formButton = document.querySelector(".finance__calc_button");
 const form = document.getElementById("financeCalcForm");
 const loanAmount = document.getElementById("financeCalcAmount");
 const repaymentPeriod = document.getElementById(
   "financialCalcRepaymentPeriod"
 );
-const errorLoan = document.querySelector(".form__error--loan");
-const errorRepayment = document.querySelector(
-  ".form__error--repayment"
+const errorLoan = document.querySelector(
+  ".finance-calc__form_error--loan"
 );
+const errorRepayment = document.querySelector(
+  ".finance-calc__form_error--repayment"
+);
+
 const bodyAmountSpans = document.querySelectorAll(
   '[data-calculator-variable="body_amount"]'
-);
-const term = document.querySelector(
-  '[data-calculator-variable="term"]'
 );
 
 const commissionAmountBlock = document.querySelector(
@@ -111,9 +112,12 @@ const generatePayments = (loanAmountValue, rowNumber) => {
 const generateInterestForUsingCredit = (
   loanAmountValue,
   repeatedRate,
-  rowNumber
+  rowNumber,
+  repaymentPeriodValue
 ) => {
-  const interestForUsingCredit = [loanAmountValue * currentRate];
+  const interestForUsingCredit = [
+    loanAmountValue * currentRate * repaymentPeriodValue,
+  ];
   for (let i = 0; i < rowNumber; i++) {
     interestForUsingCredit.push(loanAmountValue * repeatedRate);
   }
@@ -146,15 +150,12 @@ const updateTable = (dates, payments, interestForUsingCredit) => {
 // Оновлення виведених значень
 const updateOutputValues = (
   loanAmountValue,
-  repaymentPeriodValue,
-  interestForUsingCredit,
-  rowNumber
+  interestForUsingCredit
 ) => {
   bodyAmountSpans.forEach((span) => {
     span.textContent = loanAmountValue.toFixed(2) + " грн";
   });
 
-  term.textContent = repaymentPeriodValue;
   const commissionAmount = interestForUsingCredit.reduce(
     (acc, val) => acc + val,
     0
@@ -165,9 +166,8 @@ const updateOutputValues = (
   totalAmountBlock.innerHTML =
     (commissionAmount + loanAmountValue).toFixed(2) + " грн";
   const dailyRate =
-    ((commissionAmount / loanAmountValue / rowNumber) * 100).toFixed(
-      2
-    ) + "%";
+    ((commissionAmount / loanAmountValue / 730) * 100).toFixed(2) +
+    "%";
   dailyRateBlock.innerHTML = dailyRate;
 };
 
@@ -181,13 +181,13 @@ const calculateLoan = () => {
   const interestForUsingCredit = generateInterestForUsingCredit(
     loanAmountValue,
     repeatedRate,
-    rowNumber
+    rowNumber,
+    repaymentPeriodValue
   );
 
   updateTable(dates, payments, interestForUsingCredit);
   updateOutputValues(
     loanAmountValue,
-    repaymentPeriodValue,
     interestForUsingCredit,
     rowNumber
   );
@@ -198,7 +198,10 @@ const calculateLoan = () => {
   const dateObjects = dates.slice().map((date) => date.getTime());
   //   dateObjects.unshift(new Date().getTime());
 
+  //   console.log(cashflows);
+  //   console.log(dateObjects);
   //   const rate = xirr(cashflows, dateObjects);
+  //   console.log(rate);
 };
 // Синхронізація значень між інпутами
 const synchronizeInputs = () => {
@@ -255,41 +258,41 @@ const validateForm = () => {
   });
 };
 
-const xirr = (cashflows, dates) => {
-  function npv(rate) {
-    return cashflows.reduce((acc, val, i) => {
-      var days = (dates[i] - dates[0]) / 86400000; // convert milliseconds to days
-      return acc + val / Math.pow(1 + rate, days / 365);
-    }, 0);
-  }
+// const xirr = (cashflows, dates) => {
+//   function npv(rate) {
+//     return cashflows.reduce((acc, val, i) => {
+//       var days = (dates[i] - dates[0]) / 86400000; // convert milliseconds to days
+//       return acc + val / Math.pow(1 + rate, days / 365);
+//     }, 0);
+//   }
 
-  var lowRate = -0.999;
-  var highRate = 1;
-  var maxIterations = 1000;
-  var tolerance = 0.0000001;
-  var newRate,
-    npvVal,
-    iteration = 0;
+//   var lowRate = -0.999;
+//   var highRate = 1;
+//   var maxIterations = 1000;
+//   var tolerance = 0.0000001;
+//   var newRate,
+//     npvVal,
+//     iteration = 0;
 
-  do {
-    newRate = (lowRate + highRate) / 2;
-    npvVal = npv(newRate);
+//   do {
+//     newRate = (lowRate + highRate) / 2;
+//     npvVal = npv(newRate);
 
-    if (npvVal > 0) {
-      lowRate = newRate;
-    } else {
-      highRate = newRate;
-    }
+//     if (npvVal > 0) {
+//       lowRate = newRate;
+//     } else {
+//       highRate = newRate;
+//     }
 
-    iteration++;
-  } while (Math.abs(npvVal) > tolerance && iteration < maxIterations);
+//     iteration++;
+//   } while (Math.abs(npvVal) > tolerance && iteration < maxIterations);
 
-  if (iteration >= maxIterations) {
-    throw new Error("XIRR did not converge");
-  }
+//   if (iteration >= maxIterations) {
+//     throw new Error("XIRR did not converge");
+//   }
 
-  return newRate;
-};
+//   return newRate;
+// };
 // Ініціалізація
 synchronizeInputs();
 validateForm();
